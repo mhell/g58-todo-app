@@ -43,11 +43,12 @@ public class Todo {
 
     private LocalDateTime dueDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Person assignedTo;
 
-    @OneToMany
     @ToString.Exclude
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "todo_id")
     private Set<Attachment> attachments = new HashSet<>();
 
     public Todo(String title, String description) {

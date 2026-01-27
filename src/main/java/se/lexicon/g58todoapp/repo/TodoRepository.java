@@ -32,7 +32,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     // Find unfinished and overdue task
     @Query("SELECT todo FROM Todo todo WHERE todo.completed = FALSE AND todo.dueDate < CURRENT_TIMESTAMP")
-    List<Todo> findByCompletedFalseAndOverdue();
+    List<Todo> findByNonCompletedAndOverdue();
 
     // Find tasks that are not assigned to anyone
     List<Todo> findByAssignedToNull();

@@ -22,10 +22,7 @@ public class PersonService {
     }
 
     public void createPerson(Person person) {
-
         person = personRepository.save(person);
-
-
         if (person.getId() != null){
             boolean sentMessage = messageService.sendMessage(new Email(
                     person.getEmail(),
@@ -38,11 +35,9 @@ public class PersonService {
 
             if (!sentMessage){
                 log.error("Failed to send welcome email to: {}", person.getEmail());
-            }else{
+            } else {
                 log.info("Successfully sent welcome email to: {}",person.getEmail());
             }
         }
     }
-
-
 }

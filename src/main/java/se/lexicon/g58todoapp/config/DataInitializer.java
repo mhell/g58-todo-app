@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Scanner;
 
 @Configuration
 public class DataInitializer {
@@ -24,21 +25,19 @@ public class DataInitializer {
     @Bean
     CommandLineRunner run(PersonRepository personRepository, TodoRepository todoRepository, AttachmentRepository attachmentRepository, PersonService personService){
         return args -> {
-
-           // registerPerson(personService);
-
-//            seedingData(personRepository, todoRepository);
-
-
+           registerPerson(personService);
+           // seedingData(personRepository, todoRepository);
         };
     }
 
-    // TODO: See if you can get a email service to work?
     private static void registerPerson(PersonService personService) {
-        personService.createPerson(new Person("Simon", "Actual_Address_Here@lexicon.se"));
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Please enter your name: ");
+        String name = scanner.nextLine();
+        System.out.print("Please enter your email: ");
+        String email = scanner.nextLine();
+        personService.createPerson(new Person(name, email));
     }
-
-
 
     //TODO : Experiment with Seeding and updating data?
     private static void seedingData(PersonRepository personRepository, TodoRepository todoRepository) throws IOException {
@@ -77,7 +76,7 @@ public class DataInitializer {
         todoRepository.saveAll(Arrays.asList(todo1, todo2, todo3, todo4, todo5, todo6));
 
         // Since we have cascading this is not needed.
-//            attachmentRepository.saveAll(Arrays.asList(file1, file2, file3));
+        // attachmentRepository.saveAll(Arrays.asList(file1, file2, file3));
     }
 
 

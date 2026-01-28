@@ -38,8 +38,7 @@ public class Attachment {
 
     public void setTodo(Todo todo) {
         this.todo = todo;
-
         if (todo != null)
-        todo.getAttachments().add(this);
+            todo.getAttachments().add(this);
     }
 }

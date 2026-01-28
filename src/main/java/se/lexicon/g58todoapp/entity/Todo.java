@@ -2,6 +2,8 @@ package se.lexicon.g58todoapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
@@ -14,7 +16,6 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
-
 @Entity
 @Table(name = "todos")
 public class Todo {
@@ -32,16 +33,20 @@ public class Todo {
     @Column(nullable = false)
     private Boolean completed = false;
 
+    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    @Column(insertable = false)
     private LocalDateTime updatedAt;
 
     private LocalDateTime dueDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Person assignedTo;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "todo" , cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true )
     private Set<Attachment> attachments = new HashSet<>();
 
@@ -69,18 +74,6 @@ public class Todo {
         this.dueDate = dueDate;
         this.assignedTo = assignedTo;
     }
-
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
 
     // helper methods for managing attachments
     public void addAttachment(Attachment attachment) {
@@ -111,5 +104,4 @@ public class Todo {
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
-
 }

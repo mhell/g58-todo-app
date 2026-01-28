@@ -3,6 +3,7 @@ package se.lexicon.g58todoapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
@@ -14,7 +15,6 @@ import java.util.Objects;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
 @ToString
-
 @Entity
 @Table(name = "people")
 public class Person {
@@ -37,17 +37,13 @@ public class Person {
     @NonNull
     private LocalDate birthDate;
 
+    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDate createdAt;
 
     public Person(@NonNull String name, @NonNull String email) {
         this.name = name;
         this.email = email;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDate.now();
     }
 
     @Override

@@ -2,6 +2,7 @@ package se.lexicon.g58todoapp.repo;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,10 @@ import se.lexicon.g58todoapp.entity.Attachment;
 import se.lexicon.g58todoapp.entity.Person;
 import se.lexicon.g58todoapp.entity.Todo;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -25,127 +26,38 @@ class TodoRepositoryTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // TODO: More tests
+    private final String TEST_TITLE = "Test title";
+    private final String TEST_DESC = "Test description";
+    private final LocalDateTime TEST_TIME = LocalDateTime.now();
+    private Person testPerson;
 
-    @Test
-    void findByAssignedTo() {
+    @BeforeEach
+    void setUp() {
+        testPerson = new Person("Test Person", "test@example.com");
     }
 
     @Test
-    void countByAssignedTo() {
-    }
-
-    @Test
-    void findByAssignedToAndCompletedTrue() {
-    }
-
-    @Test
-    void findByTitleContainsIgnoreCase() {
-    }
-
-    @Test
-    void findByCompleted() {
-    }
-
-    @Test
-    void findByDueDateBetween() {
-    }
-
-    @Test
-    void findByDueDateBeforeAndCompletedFalse() {
-    }
-
-    @Test
-    void findByNonCompletedAndOverdue_exist_returnEntity() {
+    @DisplayName("Save Todo should persist the Todo and return it with generated ID")
+    void save_todo_shouldPersistTodo() {
         // Arrange
-        Todo savedTodo = todoRepository.save(new Todo("title", "description", LocalDateTime.now().minusDays(1)));
+        Todo newTodo = new Todo(TEST_TITLE, TEST_DESC, TEST_TIME.plusDays(1));
         // Act
-        List<Todo> foundTodos = todoRepository.findByCompletedFalseAndOverdue();
+        Todo saved = todoRepository.save(newTodo);
         // Assert
-        assertFalse(foundTodos.isEmpty());
-        assertEquals(savedTodo.getId(), foundTodos.getFirst().getId());
+        assertNotNull(saved.getId());
+        assertEquals(TEST_TITLE, saved.getTitle());
+        assertEquals(TEST_DESC, saved.getDescription());
+        assertFalse(saved.getCompleted());
+        assertEquals(TEST_TIME.plusDays(1).withNano(0), saved.getDueDate().withNano(0));
     }
-
-    @Test
-    void findByNonCompletedAndOverdue_noneOverdue_returnNone() {
-        // Arrange
-        Todo savedTodo = todoRepository.save(new Todo("title", "description", LocalDateTime.now().plusDays(1)));
-        // Act
-        List<Todo> foundTodos = todoRepository.findByCompletedFalseAndOverdue();
-        // Assert
-        assertTrue(foundTodos.isEmpty());
-    }
-
-    @Test
-    void findByNonCompletedAndOverdue_allCompleted_returnNone() {
-        // Arrange
-        Todo savedTodo = todoRepository.save(new Todo("title", "description", true, LocalDateTime.now().minusDays(1)));
-        // Act
-        List<Todo> foundTodos = todoRepository.findByCompletedFalseAndOverdue();
-        // Assert
-        assertTrue(foundTodos.isEmpty());
-    }
-
-    @Test
-    void findByNonCompletedAndOverdue_allCompletedNoneOverdue_returnNone() {
-        // Arrange
-        Todo savedTodo = todoRepository.save(new Todo("title", "description", true, LocalDateTime.now().plusDays(1)));
-        // Act
-        List<Todo> foundTodos = todoRepository.findByCompletedFalseAndOverdue();
-        // Assert
-        assertTrue(foundTodos.isEmpty());
-    }
-
-    @Test
-    void findByAssignedToNull_exist_returnEntity() {
-        // Arrange
-        Todo savedTodo = todoRepository.save(new Todo("title", "description"));
-        // Act
-        List<Todo> foundTodos = todoRepository.findByAssignedToNull();
-        // Assert
-        assertFalse(foundTodos.isEmpty());
-        assertEquals(savedTodo.getId(), foundTodos.getFirst().getId());
-    }
-
-    @Test
-    void findByAssignedToNull_dontExist_returnNone() {
-        // Arrange
-        Person person = new Person("Jesus", "Christ", LocalDate.of(0, 1, 1));
-        Todo savedTodo = todoRepository.save(new Todo("title", "description", LocalDateTime.now(), person));
-        // Act
-        List<Todo> foundTodos = todoRepository.findByAssignedToNull();
-        // Assert
-        assertTrue(foundTodos.isEmpty());
-    }
-
-    @Test
-    void findByDueDateIsNull_exist_returnEntity() {
-        // Arrange
-        Todo savedTodo = todoRepository.save(new Todo("title", "description"));
-        // Act
-        List<Todo> foundTodos = todoRepository.findByDueDateIsNull();
-        // Assert
-        assertFalse(foundTodos.isEmpty());
-        assertEquals(savedTodo.getId(), foundTodos.getFirst().getId());
-    }
-
-    @Test
-    void findByDueDateIsNull_dontExist_returnNone() {
-        // Arrange
-        Todo savedTodo = todoRepository.save(new Todo("title", "description", LocalDateTime.now()));
-        // Act
-        List<Todo> foundTodos = todoRepository.findByDueDateIsNull();
-        // Assert
-        assertTrue(foundTodos.isEmpty());
-    }
-
+    
     @Test
     @DisplayName("Test cascade persist")
     void getAttachment_afterSave_returnAttachment() {
         // Arrange
         String attachmentFileName = "fileName";
         Attachment attachment = new Attachment(attachmentFileName, "fileType", "test".getBytes());
-        Todo todo = new Todo("title", "description");
+        Todo todo = new Todo(TEST_TITLE, TEST_DESC);
         todo.addAttachment(attachment);
         todoRepository.save(todo);
         // Act
@@ -160,7 +72,7 @@ class TodoRepositoryTest {
     void getAttachment_afterRemove_expectNull() {
         // Arrange
         Attachment attachment = new Attachment("fileName", "fileType", "test".getBytes());
-        Todo todo = new Todo("title", "description");
+        Todo todo = new Todo(TEST_TITLE, TEST_DESC);
         todo.addAttachment(attachment);
         todoRepository.save(todo);
         todoRepository.delete(todo);
@@ -175,7 +87,7 @@ class TodoRepositoryTest {
     void getAttachment_afterRemoved_ExpectNull() {
         // Arrange
         Attachment attachment = new Attachment("fileName", "fileType", "test".getBytes());
-        Todo todo = new Todo("title", "description");
+        Todo todo = new Todo(TEST_TITLE, TEST_DESC);
         todo.addAttachment(attachment);
         Todo savedTodo = todoRepository.save(todo);
         // Act
@@ -185,4 +97,154 @@ class TodoRepositoryTest {
         // Assert
         assertNull(foundAttachment);
     }
+
+    @Test
+    void findByNonCompletedAndOverdue_allCompletedNoneOverdue_returnNone() {
+        // Arrange
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, true, TEST_TIME.plusDays(1)));
+        // Act
+        List<Todo> retrievedTodos = todoRepository.findByCompletedFalseAndOverdue();
+        // Assert
+        assertTrue(retrievedTodos.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Find Todos containing case-insensitive title substring should return matching Todos")
+    void findByTitleContainingIgnoreCase_ShouldReturnMatchingTodos() {
+        // Arrange
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC));
+        String searchString = "TITLE";
+        // Act
+        List<Todo> retrievedTodos = todoRepository.findByTitleContainsIgnoreCase(searchString);
+        // Assert
+        assertEquals(1, retrievedTodos.size());
+    }
+
+    @Test
+    @DisplayName("Find Todos by Person should return that person's Todos")
+    void findByAssignedTo_ShouldReturnPersonsTodos() {
+        // Arrange
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson));
+        // Act
+        List<Todo> retrievedTodos = todoRepository.findByAssignedTo(testPerson);
+        // Assert
+        assertEquals(1, retrievedTodos.size());
+        assertEquals(TEST_TITLE, retrievedTodos.getFirst().getTitle());
+        assertEquals(TEST_DESC, retrievedTodos.getFirst().getDescription());
+    }
+
+    @Test
+    @DisplayName("Find Todos by completion status should return completed Todos")
+    void findByCompleted_ShouldReturnCompletedTodos() {
+        // Arrange
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC));
+        Todo savedTodo = todoRepository.save(new Todo(TEST_TITLE, TEST_DESC));
+        savedTodo.setCompleted(true);
+        // Act
+        List<Todo> retrievedTodos = todoRepository.findByCompleted(true);
+        // Assert
+        assertEquals(1, retrievedTodos.size());
+    }
+
+    @Test
+    @DisplayName("Find Todos due within a date range should return matching Todos")
+    void findByDueDateBetween_ShouldReturnTodosInDateRange() {
+        // Arrange
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME));
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME.plusDays(100)));
+        // Act
+        List<Todo> retrievedTodos = todoRepository.findByDueDateBetween(TEST_TIME.minusDays(1), TEST_TIME.plusDays(1));
+        // Assert
+        assertEquals(1, retrievedTodos.size());
+    }
+
+    @Test
+    @DisplayName("Find overdue and incomplete Todos should return matching Todos")
+    void findByDueDateBeforeAndCompletedFalse_ShouldReturnOverdueTodos() {
+        // Arrange
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME));
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME.minusDays(1)));
+        Todo savedTodo = todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME.minusDays(1)));
+        savedTodo.setCompleted(true);
+        // Act
+        List<Todo> retrievedTodos = todoRepository.findByDueDateBeforeAndCompletedFalse(TEST_TIME);
+        // Assert
+        assertEquals(1, retrievedTodos.size());
+    }
+
+    @Test
+    @DisplayName("Find unassigned Todos should return Todos with no Person set")
+    void findByAssignedToNull_ShouldReturnUnassignedTodos() {
+        // Arrange
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson));
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, null));
+        // Act
+        List<Todo> retrievedTodos = todoRepository.findByAssignedToNull();
+        // Assert
+        assertEquals(1, retrievedTodos.size());
+        assertNull(retrievedTodos.getFirst().getAssignedTo());
+    }
+
+    @Test
+    @DisplayName("Find unfinished overdue Todos should return matching Todos")
+    void findByCompletedFalseAndOverdue_ShouldReturnUnfinishedOverdueTasks() {
+        // Arrange
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME.plusDays(1)));
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME.minusDays(1)));
+        Todo savedTo = todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME.minusDays(1)));
+        savedTo.setCompleted(true);
+        // Act
+        List<Todo> retrievedTodos = todoRepository.findByCompletedFalseAndOverdue();
+        // Assert
+        assertEquals(1, retrievedTodos.size());
+        assertFalse(retrievedTodos.getFirst().getCompleted());
+        assertTrue(retrievedTodos.getFirst().isOverdue());
+    }
+
+    @Test
+    @DisplayName("Find completed Todos for a Person by ID should return matching Todos")
+    void findByAssignedToAndCompletedTrue_ShouldReturnCompletedTasksForPerson() {
+        // Arrange
+        Person testPerson2 = new Person("Test Person 2", "test2@example.com");
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson));
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));
+        Todo savedTodo = todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));
+        savedTodo.setCompleted(true);
+        // Act
+        List<Todo> retrievedTodos = todoRepository.findByAssignedToAndCompletedTrue(testPerson2);
+        // Assert
+        assertEquals(1, retrievedTodos.size());
+        assertTrue(retrievedTodos.getFirst().getCompleted());
+        assertEquals(testPerson2.getId(), retrievedTodos.getFirst().getAssignedTo().getId());
+
+    }
+
+    @Test
+    @DisplayName("Find Todos with no due date should return matching Todos")
+    void findByDueDateIsNull_ShouldReturnTodosWithNoDueDate() {
+        // Arrange
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME));
+        Todo savedTodo = todoRepository.save(new Todo(TEST_TITLE, TEST_DESC));
+        // Act
+        List<Todo> retrievedTodos = todoRepository.findByDueDateIsNull();
+        // Assert
+        assertEquals(1, retrievedTodos.size());
+        assertNull(retrievedTodos.getFirst().getDueDate());
+        assertEquals(savedTodo, retrievedTodos.getFirst());
+    }
+
+    @Test
+    @DisplayName("Count Todos for a Person by ID should return correct count")
+    void countByAssignedTo_ShouldReturnCorrectCount() {
+        // Arrange
+        Person testPerson2 = new Person("Test Person 2", "test2@example.com");
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson));
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));
+        // Act
+        int count = todoRepository.countByAssignedTo(testPerson2);
+        // Assert
+        assertThat(count).isEqualTo(2);
+    }
+
 }

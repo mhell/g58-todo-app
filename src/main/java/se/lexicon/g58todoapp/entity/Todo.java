@@ -89,6 +89,10 @@ public class Todo {
         attachment.setTodo(null); // disconnect both ways
     }
 
+    public boolean isOverdue() {
+        return dueDate.isBefore(LocalDateTime.now());
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

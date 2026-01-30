@@ -9,7 +9,6 @@ import se.lexicon.notify.model.Email;
 import se.lexicon.notify.service.MessageService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -42,16 +41,20 @@ public class PersonService {
         }
     }
 
+    public void deletePerson(Long id) {
+        personRepository.deleteById(id);
+    }
+
+    public Person updatePerson(Person person) {
+        return personRepository.save(person);
+    }
+
     public List<Person> findAll() {
         return personRepository.findAll();
     }
 
     public Person findById(Long id){
         return personRepository.findById(id).orElseThrow(()-> new PersonNotFoundException("Person not found"));
-    }
-
-    public void deletePerson(Long id) {
-        personRepository.deleteById(id);
     }
 
     public Person findByEmail(String email) {

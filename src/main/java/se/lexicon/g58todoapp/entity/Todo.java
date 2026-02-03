@@ -1,5 +1,6 @@
 package se.lexicon.g58todoapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -47,6 +48,7 @@ public class Todo {
     private Person assignedTo;
 
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "todo" , cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true )
     private Set<Attachment> attachments = new HashSet<>();
 
@@ -89,8 +91,9 @@ public class Todo {
         attachment.setTodo(null); // disconnect both ways
     }
 
+    @JsonIgnore
     public boolean isOverdue() {
-        return dueDate.isBefore(LocalDateTime.now());
+        return dueDate != null && dueDate.isBefore(LocalDateTime.now());
     }
 
     @Override

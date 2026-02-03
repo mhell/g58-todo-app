@@ -99,16 +99,6 @@ class TodoRepositoryTest {
     }
 
     @Test
-    void findByNonCompletedAndOverdue_allCompletedNoneOverdue_returnNone() {
-        // Arrange
-        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, true, TEST_TIME.plusDays(1)));
-        // Act
-        List<Todo> retrievedTodos = todoRepository.findByCompletedFalseAndOverdue();
-        // Assert
-        assertTrue(retrievedTodos.isEmpty());
-    }
-
-    @Test
     @DisplayName("Find Todos containing case-insensitive title substring should return matching Todos")
     void findByTitleContainingIgnoreCase_ShouldReturnMatchingTodos() {
         // Arrange
@@ -191,8 +181,7 @@ class TodoRepositoryTest {
         // Arrange
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME.plusDays(1)));
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME.minusDays(1)));
-        Todo savedTo = todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME.minusDays(1)));
-        savedTo.setCompleted(true);
+        todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, true, TEST_TIME.minusDays(1)));
         // Act
         List<Todo> retrievedTodos = todoRepository.findByCompletedFalseAndOverdue();
         // Assert

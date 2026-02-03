@@ -117,7 +117,7 @@ class TodoRepositoryTest {
         entityManager.persist(testPerson);
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson));
         // Act
-        List<Todo> retrievedTodos = todoRepository.findByAssignedTo(testPerson);
+        List<Todo> retrievedTodos = todoRepository.findByAssignedTo_Id(testPerson.getId());
         // Assert
         assertEquals(1, retrievedTodos.size());
         assertEquals(TEST_TITLE, retrievedTodos.getFirst().getTitle());
@@ -204,7 +204,7 @@ class TodoRepositoryTest {
         Todo savedTodo = todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));
         savedTodo.setCompleted(true);
         // Act
-        List<Todo> retrievedTodos = todoRepository.findByAssignedToAndCompletedTrue(testPerson2);
+        List<Todo> retrievedTodos = todoRepository.findByAssignedTo_IdAndCompletedTrue(testPerson2.getId());
         // Assert
         assertEquals(1, retrievedTodos.size());
         assertTrue(retrievedTodos.getFirst().getCompleted());
@@ -237,7 +237,7 @@ class TodoRepositoryTest {
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));
         // Act
-        int count = todoRepository.countByAssignedTo(testPerson2);
+        int count = todoRepository.countByAssignedTo_Id(testPerson2.getId());
         // Assert
         assertThat(count).isEqualTo(2);
     }

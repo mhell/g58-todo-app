@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
     // find tasks assigned to a specific Person
-    List<Todo> findByAssignedTo(Person assignedTo);
+    List<Todo> findByAssignedTo_Id(Long assignedToId);
 
     // Count all tasks assigned to a person
-    int countByAssignedTo(Person assignedTo);
+    int countByAssignedTo_Id(Long assignedToId);
 
     // Find completed tasks assigned to a specific person
-    List<Todo> findByAssignedToAndCompletedTrue(Person assignedTo);
+    List<Todo> findByAssignedTo_IdAndCompletedTrue(Long assignedTo);
 
     // Find todos by title keyword (case-insensitive contains)
     List<Todo> findByTitleContainsIgnoreCase(String title);

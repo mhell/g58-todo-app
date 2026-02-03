@@ -43,7 +43,7 @@ public class Todo {
 
     private LocalDateTime dueDate;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Person assignedTo;
 
     @ToString.Exclude

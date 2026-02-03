@@ -114,6 +114,7 @@ class TodoRepositoryTest {
     @DisplayName("Find Todos by Person should return that person's Todos")
     void findByAssignedTo_ShouldReturnPersonsTodos() {
         // Arrange
+        entityManager.persist(testPerson);
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson));
         // Act
         List<Todo> retrievedTodos = todoRepository.findByAssignedTo(testPerson);
@@ -166,6 +167,7 @@ class TodoRepositoryTest {
     @DisplayName("Find unassigned Todos should return Todos with no Person set")
     void findByAssignedToNull_ShouldReturnUnassignedTodos() {
         // Arrange
+        entityManager.persist(testPerson);
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson));
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, null));
         // Act
@@ -195,6 +197,8 @@ class TodoRepositoryTest {
     void findByAssignedToAndCompletedTrue_ShouldReturnCompletedTasksForPerson() {
         // Arrange
         Person testPerson2 = new Person("Test Person 2", "test2@example.com");
+        entityManager.persist(testPerson);
+        entityManager.persist(testPerson2);
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson));
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));
         Todo savedTodo = todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));
@@ -227,6 +231,8 @@ class TodoRepositoryTest {
     void countByAssignedTo_ShouldReturnCorrectCount() {
         // Arrange
         Person testPerson2 = new Person("Test Person 2", "test2@example.com");
+        entityManager.persist(testPerson);
+        entityManager.persist(testPerson2);
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson));
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));
         todoRepository.save(new Todo(TEST_TITLE, TEST_DESC, TEST_TIME, testPerson2));

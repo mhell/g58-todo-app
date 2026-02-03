@@ -25,8 +25,8 @@ public class DataInitializer {
     @Bean
     CommandLineRunner run(PersonRepository personRepository, TodoRepository todoRepository, AttachmentRepository attachmentRepository, PersonService personService){
         return args -> {
-           registerPerson(personService);
-           // seedingData(personRepository, todoRepository);
+           // registerPerson(personService);
+           seedingData(personRepository, todoRepository);
         };
     }
 
@@ -52,7 +52,6 @@ public class DataInitializer {
         Todo todo4 = new Todo("Go To Gym", "Workout session"); // No due date
         Todo todo5 = new Todo("Clean bike", "Maintenance", now.plusHours(12));
         Todo todo6 = new Todo("Clean Car", "Wash and vacuum", now.plusDays(1));
-
 
         Attachment file1 = new Attachment("unit-test-guide.pdf", "application/pdf", "Sample PDF Content".getBytes());
         file1.setTodo(todo2);

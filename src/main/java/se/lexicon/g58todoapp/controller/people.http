@@ -1,0 +1,17 @@
+### Get one Person
+GET http://localhost:8080/api/people/1
+Accept: application/json
+
+### Getting all People
+GET localhost:8080/api/people
+
+### Creating a new Person
+POST localhost:8080/api/people
+Content-Type: application/json
+
+{
+    "name": "Simon",
+    "email": "simon@test.se",
+    "birthDate": "2020-01-01"
+}
+

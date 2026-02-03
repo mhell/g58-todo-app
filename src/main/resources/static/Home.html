@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo Application</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen text-white p-8">
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold text-purple-400 mb-8 text-center">
+        Welcome To This Application! 👋🏼🤓🎉
+    </h1>
+
+    <ul class="todo-list bg-gray-800 rounded-lg shadow-xl p-6 space-y-4">
+        <!-- Completed Task -->
+        <li class="bg-gray-700 p-4 rounded-md border-l-4 border-green-500 hover:bg-gray-600 transition-colors opacity-75">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-green-400 font-semibold line-through">Complete Spring Boot Project</span>
+                        <span class="text-xs bg-green-600 text-white px-2 py-1 rounded">✓ Completed</span>
+                    </div>
+                    <p class="text-gray-400 mt-1 line-through">Implement REST API endpoints and validation</p>
+                </div>
+                <span class="text-sm text-purple-400 bg-gray-800 px-3 py-1 rounded-full ml-3">👤 Simon</span>
+            </div>
+            <div class="flex gap-4 text-xs text-gray-400 border-t border-gray-600 pt-2">
+                <span>📅 Created: 2024-01-15</span>
+                <span>⏰ Due: 2024-01-22</span>
+                <span class="text-green-400">✓ Completed: 2024-01-20</span>
+            </div>
+        </li>
+
+        <!-- Active Task - Urgent -->
+        <li class="bg-gray-700 p-4 rounded-md border-l-4 border-red-500 hover:bg-gray-600 transition-colors">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-purple-300 font-semibold">Review Code Architecture</span>
+                        <span class="text-xs bg-red-600 text-white px-2 py-1 rounded">⚠ Overdue</span>
+                    </div>
+                    <p class="text-gray-300 mt-1">Check service layer and DTO implementations</p>
+                </div>
+                <span class="text-sm text-purple-400 bg-gray-800 px-3 py-1 rounded-full ml-3">👤 Mehrdad</span>
+            </div>
+            <div class="flex gap-4 text-xs text-gray-400 border-t border-gray-600 pt-2">
+                <span>📅 Created: 2024-01-18</span>
+                <span class="text-red-400">⏰ Due: 2024-01-24</span>
+                <span>Status: In Progress</span>
+            </div>
+        </li>
+
+        <!-- Active Task -->
+        <li class="bg-gray-700 p-4 rounded-md border-l-4 border-purple-500 hover:bg-gray-600 transition-colors">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-purple-300 font-semibold">Write Unit Tests</span>
+                        <span class="text-xs bg-yellow-600 text-white px-2 py-1 rounded">⏳ Pending</span>
+                    </div>
+                    <p class="text-gray-300 mt-1">Test PersonController and PersonService methods</p>
+                </div>
+                <span class="text-sm text-purple-400 bg-gray-800 px-3 py-1 rounded-full ml-3">👤 Elnaz</span>
+            </div>
+            <div class="flex gap-4 text-xs text-gray-400 border-t border-gray-600 pt-2">
+                <span>📅 Created: 2024-01-20</span>
+                <span>⏰ Due: 2024-01-28</span>
+                <span>Status: Not Started</span>
+            </div>
+        </li>
+
+        <!-- Active Task -->
+        <li class="bg-gray-700 p-4 rounded-md border-l-4 border-purple-500 hover:bg-gray-600 transition-colors">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-purple-300 font-semibold">Configure Database</span>
+                        <span class="text-xs bg-blue-600 text-white px-2 py-1 rounded">🔄 Active</span>
+                    </div>
+                    <p class="text-gray-300 mt-1">Set up JPA entities and repositories</p>
+                </div>
+                <span class="text-sm text-purple-400 bg-gray-800 px-3 py-1 rounded-full ml-3">👤 Simon</span>
+            </div>
+            <div class="flex gap-4 text-xs text-gray-400 border-t border-gray-600 pt-2">
+                <span>📅 Created: 2024-01-19</span>
+                <span>⏰ Due: 2024-01-26</span>
+                <span>Status: In Progress</span>
+            </div>
+        </li>
+
+        <!-- Completed Task -->
+        <li class="bg-gray-700 p-4 rounded-md border-l-4 border-green-500 hover:bg-gray-600 transition-colors opacity-75">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-green-400 font-semibold line-through">Add API Documentation</span>
+                        <span class="text-xs bg-green-600 text-white px-2 py-1 rounded">✓ Completed</span>
+                    </div>
+                    <p class="text-gray-400 mt-1 line-through">Complete Swagger/OpenAPI annotations</p>
+                </div>
+                <span class="text-sm text-purple-400 bg-gray-800 px-3 py-1 rounded-full ml-3">👤 Mehrdad</span>
+            </div>
+            <div class="flex gap-4 text-xs text-gray-400 border-t border-gray-600 pt-2">
+                <span>📅 Created: 2024-01-16</span>
+                <span>⏰ Due: 2024-01-25</span>
+                <span class="text-green-400">✓ Completed: 2024-01-23</span>
+            </div>
+        </li>
+
+        <!-- Active Task -->
+        <li class="bg-gray-700 p-4 rounded-md border-l-4 border-purple-500 hover:bg-gray-600 transition-colors">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-purple-300 font-semibold">Implement Exception Handling</span>
+                        <span class="text-xs bg-yellow-600 text-white px-2 py-1 rounded">⏳ Pending</span>
+                    </div>
+                    <p class="text-gray-300 mt-1">Create global exception handler with proper error responses</p>
+                </div>
+                <span class="text-sm text-purple-400 bg-gray-800 px-3 py-1 rounded-full ml-3">👤 Elnaz</span>
+            </div>
+            <div class="flex gap-4 text-xs text-gray-400 border-t border-gray-600 pt-2">
+                <span>📅 Created: 2024-01-21</span>
+                <span>⏰ Due: 2024-01-30</span>
+                <span>Status: Not Started</span>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

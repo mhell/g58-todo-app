@@ -1,0 +1,39 @@
+### Get one Todo item
+GET http://localhost:8080/api/todoitems/1
+Accept: application/json
+
+### Get all Todo item
+GET http://localhost:8080/api/todoitems
+Accept: application/json
+
+### Get todos assigned to a Person
+GET http://localhost:8080/api/todoitems?assignee=1
+Accept: application/json
+
+### find todos between two due dates
+GET http://localhost:8080/api/todoitems?before=2026-02-05T14:30:00&after=3026-01-01T14:30:00
+Accept: application/json
+
+### Create a new Todo
+POST localhost:8080/api/todoitems
+Content-Type: application/json
+
+{
+"title": "Finish project",
+"description": "Do all project tasks."
+}
+
+### Update a Todo
+PUT localhost:8080/api/todoitems/7
+Content-Type: application/json
+
+{
+  "id": 7,
+  "title": "Finish project",
+  "description": "Do all project tasks.",
+  "dueDate": "2026-02-05T00:00:00"
+}
+
+### Delete a Todo
+DELETE localhost:8080/api/todoitems/7
+

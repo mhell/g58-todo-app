@@ -29,10 +29,10 @@ public class TodoService {
                 save.getTitle(),
                 save.getDescription(),
                 save.getDueDate(),
-                save.getCompleted().booleanValue(),
+                save.getCompleted(),
                 save.getCreatedAt(),
                 save.getUpdatedAt(),
-                save.getAssignedTo().getId(),
+                save.getAssignedTo() != null ? save.getAssignedTo().getId() : null,
                 save.getAttachments().size());
     }
 }

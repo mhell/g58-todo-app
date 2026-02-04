@@ -2,10 +2,10 @@ package se.lexicon.g58todoapp.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.lexicon.g58todoapp.dto.TodoDto;
-import se.lexicon.g58todoapp.service.PersonService;
 import se.lexicon.g58todoapp.service.TodoService;
 
 @RequestMapping("api/todos")
@@ -20,7 +20,7 @@ public class TodoController {
 
 
     @PostMapping
-    public ResponseEntity<?> createTodo(TodoDto todoDto){
+    public ResponseEntity<?> createTodo(@RequestBody TodoDto todoDto){
 
         todoService.create(todoDto);
 

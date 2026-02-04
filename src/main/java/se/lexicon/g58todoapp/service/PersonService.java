@@ -14,6 +14,8 @@ import java.util.List;
 @Service
 public class PersonService {
 
+    // TODO: Return dto
+
     PersonRepository personRepository;
     MessageService<Email> messageService;
 

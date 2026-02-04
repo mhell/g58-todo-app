@@ -7,6 +7,8 @@ import se.lexicon.g58todoapp.repo.PersonRepository;
 
 import java.util.List;
 
+// TODO: use DTOs and PersonService
+
 //localhost:8080/api/people for all the endpoint in this class.
 @RequestMapping("/api/people")
 @RestController

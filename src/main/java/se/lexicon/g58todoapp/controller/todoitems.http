@@ -11,7 +11,7 @@ GET http://localhost:8080/api/todoitems?assignee=1
 Accept: application/json
 
 ### find todos between two due dates
-GET http://localhost:8080/api/todoitems?before=2026-02-05T14:30:00&after=3026-01-01T14:30:00
+GET http://localhost:8080/api/todoitems?before=2026-02-06T14:30:00&after=3026-01-01T14:30:00
 Accept: application/json
 
 ### Create a new Todo

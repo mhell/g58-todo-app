@@ -1,9 +1,10 @@
 package se.lexicon.g58todoapp.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.lexicon.g58todoapp.entity.Todo;
-import se.lexicon.g58todoapp.repo.TodoRepository;
+import se.lexicon.g58todoapp.dto.TodoDto;
+import se.lexicon.g58todoapp.service.TodoService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,63 +14,68 @@ import java.util.Optional;
 @RestController
 public class TodoController {
 
-    private final TodoRepository todoRepository;
+    private final TodoService todoService;
 
-    public TodoController(TodoRepository todoRepository) {
-        this.todoRepository = todoRepository;
-    }
-
-    // find all todos
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Todo> getTodoItems() {
-        return todoRepository.findAll();
-    }
-
-    // find one todo
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Todo getTodoById(@PathVariable Long id){
-        return todoRepository.findById(id).orElseThrow();
-    }
-
-    // find todos assigned to a person
-    @GetMapping(params = "assignee")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Todo> findByAssignedTo(@RequestParam Long assignee) {
-        return todoRepository.findByAssignedTo_Id(assignee);
-    }
-
-    // find todos between two due dates
-    @GetMapping(params = {"before", "after"})
-    @ResponseStatus(HttpStatus.OK)
-    public List<Todo> findByDueDateBetween(@RequestParam LocalDateTime before, @RequestParam LocalDateTime after) {
-        return todoRepository.findByDueDateBetween(before, after);
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
     }
 
     // create new todo
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createTodo(@RequestBody Todo todo){
-        todoRepository.save(todo);
+    public ResponseEntity<TodoDto> createTodo(@RequestBody TodoDto todo){
+        TodoDto todoDto = todoService.createTodo(todo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(todoDto);
     }
 
-    // TODO: Use DTO:s
+    // find all todos
+    @GetMapping
+    public ResponseEntity<List<TodoDto>> getTodoItems() {
+        var result =  todoService.findAll();
+        return ResponseEntity.ok(result);
+    }
+
+    // find one todo
+    @GetMapping("/{id}")
+    public ResponseEntity<TodoDto> getTodoById(@PathVariable Long id){
+        Optional<TodoDto> optional = todoService.findById(id);
+        if(optional.isPresent()) {
+            return ResponseEntity.ok(optional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // find todos assigned to a person
+    @GetMapping(params = "assignee")
+    public ResponseEntity<List<TodoDto>> findByAssignedTo(@RequestParam Long assignee) {
+        List<TodoDto> result = todoService.findByAssignedTo_Id(assignee);
+        return ResponseEntity.ok(result);
+    }
+
+    // find todos between two due dates
+    @GetMapping(params = {"before", "after"})
+    public ResponseEntity<List<TodoDto>> findByDueDateBetween(@RequestParam LocalDateTime before, @RequestParam LocalDateTime after) {
+        List<TodoDto> result = todoService.findByDueDateBetween(before, after);
+        return ResponseEntity.ok(result);
+    }
+
     // update a todo
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateTodo(@PathVariable Long id, @RequestBody Todo todo){
-        Optional<Todo> detached = todoRepository.findById(id);
-        if (detached.isEmpty()) {
-            throw new IllegalArgumentException();
+    public ResponseEntity<TodoDto>  updateTodo(@PathVariable Long id, @RequestBody TodoDto todoDto){
+        if(todoDto.id().equals(id)) {
+            TodoDto updated = todoService.updateTodo(todoDto);
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.badRequest().build();
         }
-        todoRepository.save(todo);
     }
 
     // delete todo
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTodo(@PathVariable Long id){
-        todoRepository.deleteById(id);
+    public ResponseEntity<?> deleteTodo(@PathVariable Long id){
+        return todoService.deleteTodo(id) ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.notFound().build();
     }
 }

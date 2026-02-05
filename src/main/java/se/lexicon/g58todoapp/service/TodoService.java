@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import se.lexicon.g58todoapp.dto.TodoDto;
 import se.lexicon.g58todoapp.entity.Person;
 import se.lexicon.g58todoapp.entity.Todo;
-import se.lexicon.g58todoapp.exception.PersonNotFoundException;
 import se.lexicon.g58todoapp.exception.TodoNotFoundException;
 import se.lexicon.g58todoapp.repo.PersonRepository;
 import se.lexicon.g58todoapp.repo.TodoRepository;
@@ -55,13 +54,13 @@ public class TodoService {
 
     @Transactional
     public TodoDto updateTodo(TodoDto todoDto) {
-        Todo todo = todoRepository.findById(todoDto.id()).orElseThrow(TodoNotFoundException::new);
+        Todo todo = todoRepository.findById(todoDto.id()).orElseThrow(()-> new TodoNotFoundException("Todo not found"));
         todo.setTitle(todoDto.title());
         todo.setDescription(todoDto.description());
         todo.setCompleted(todoDto.completed());
         todo.setDueDate(todoDto.dueDate());
         Person assignee = todoDto.assignedToId() == null ? null :
-                personRepository.findById(todoDto.assignedToId()).orElseThrow(PersonNotFoundException::new);
+                personRepository.findById(todoDto.assignedToId()).orElseThrow(()-> new TodoNotFoundException("Todo not found"));
         todo.setAssignedTo(assignee);
         return convertToDto(todoRepository.save(todo));
     }

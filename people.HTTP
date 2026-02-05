@@ -26,4 +26,4 @@ Content-Type: application/json
 GET localhost:8080/api/people/-65
 
 ### Get by Id - Triggers our custom Exceptipon handler 🫡
-GET localhost:8080/api/people/-65
+GET localhost:8080/api/people/65

@@ -62,7 +62,7 @@ public class TodoService {
         Person assignee = todoDto.assignedToId() == null ? null :
                 personRepository.findById(todoDto.assignedToId()).orElseThrow(()-> new TodoNotFoundException("Todo not found"));
         todo.setAssignedTo(assignee);
-        return convertToDto(todoRepository.save(todo));
+        return convertToDto(todo); // todoRepository.save(todo)) not needed because of dirty checking
     }
 
     public boolean deleteTodo(Long id) {
